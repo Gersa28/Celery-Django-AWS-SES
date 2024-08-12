@@ -1,0 +1,98 @@
+Introduction
+----------------------------------------------------------------
+python --version
+pip install virtualenv
+python.exe -m pip install --upgrade pip
+
+virtualenv venv
+venv\Scripts\activate
+pip list
+python.exe -m pip install --upgrade pip
+pip install django
+django-admin startproject elevate 
+cd elevate
+python manage.py runserver
+
+
+Create and setup a basic Django project
+----------------------------------------------------------------
+django-admin startapp lynx
+python manage.py runserver
+creamos urls.py en elevate\lynx\urls.py
+
+
+Setting up Celery and Redis
+----------------------------------------------------------------
+pip install celery
+pip install redis
+pip list
+python manage.py makemigrations
+python manage.py migrate
+
+
+Creating our first task with Celery (Basic timer)
+----------------------------------------------------------------
+crear tasks.py en elevate\lynx\tasks.py
+
+En otra ventana de comandos (CMD), activamos el celery server: 
+venv\Scripts\activate
+cd elevate
+celery -A elevate worker -l info
+
+
+Setup the AWS CLI
+----------------------------------------------------------------
+instalar AWS CLI y comprobar con:
+aws --version 
+
+Create an IAM user
+----------------------------------------------------------------
+Crear usuario: cwd-user1
+Console sign-in URL: https://590183727524.signin.aws.amazon.com/console
+User name: cwd-user1
+Permisos: 
+* AdministratorAccess
+* AmazonSESFullAccess
+* IAMUserChangePassword
+AWS Console password: ---
+Acces key: ---
+SAK: ---
+Account Alias: ---
+
+
+Integrating Amazon SES
+----------------------------------------------------------------
+From Email: mail1@gmail.com
+To Email: mail2@gmail.com
+
+Crear las dos identidades en Amazon SES y luego verificar ambos e-mails.
+
+Instalar paquete Django SES:
+pip install django-ses
+
+en elevate\elevate\settings.py:
+### Email Configuration
+AWS_ACCESS_KEY_ID = 'AKIAYS2NRAGSPQ5GLTHP'
+AWS_SECRET_ACCESS_KEY = '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'
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SES_REGION_NAME = 'us-east-1'
+AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
+
+
+Creating our second task with Celery (Sending emails)
+----------------------------------------------------------------
+Definimos tarea de envío de mails en :
+elevate\lynx\tasks.py
+
+Importamos nuestra tarea a views:
+elevate\lynx\views.py
+
+Reiniciar Celery:
+Apagar
+venv\Scripts\activate
+cd elevate
+celery -A elevate worker -l INFO --without-gossip --without-mingle --without-heartbeat -Ofair --pool=solo
+
+Requirements
+----------------------------------------------------------------
+pip freeze > requirements.txt
