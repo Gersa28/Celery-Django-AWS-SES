@@ -130,8 +130,8 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
 ### Email Configuration
-AWS_ACCESS_KEY_ID = ''################################''
-AWS_SECRET_ACCESS_KEY = '################################'
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
 EMAIL_BACKEND = 'django_ses.SESBackend'
 AWS_SES_REGION_NAME = 'Zona de AWS'
 AWS_SES_REGION_ENDPOINT = 'email-smtp.us-east-1.amazonaws.com'
